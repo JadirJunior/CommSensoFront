@@ -22,7 +22,7 @@ export default function OurTeam() {
       role: "Aluno do Curso de Engenharia de Computação",
       position: "Bolsista",
       bio: "Responsável pelo desenvolvimento de interfaces e visualização de dados dos sensores, integrando tecnologia e sustentabilidade.",
-      image: "/placeholder.svg?height=300&width=300",
+      image: "/Lourenco.jpg",
       social: {
         email: "lourenco@example.com",
         github: "#",

@@ -164,26 +164,38 @@ export default function SensorData() {
     if (filters.container && filters.container !== "all") params.append("container", filters.container)
     if (filters.limit) params.append("limit", filters.limit.toString())
 
-    const response = await fetch(`${API_BASE_URL}/measure?${params}`)
+    const url = `${API_BASE_URL}/measure?${params}`
+    console.log("📊 Fetching measurements from:", url)
+    
+    const response = await fetch(url)
     if (!response.ok) throw new Error(`HTTP ${response.status}`)
 
     const result: ApiResponse<Measurement> = await response.json()
+    console.log("📊 Measurements response:", result)
     return result.data || []
   }
 
   const fetchSensors = async (): Promise<Sensor[]> => {
-    const response = await fetch(`${API_BASE_URL}/sensores`)
+    const url = `${API_BASE_URL}/sensores`
+    console.log("🔧 Fetching sensors from:", url)
+    
+    const response = await fetch(url)
     if (!response.ok) throw new Error(`HTTP ${response.status}`)
 
     const result: ApiResponse<Sensor> = await response.json()
+    console.log("🔧 Sensors response:", result)
     return result.data || []
   }
 
   const fetchContainers = async (): Promise<Container[]> => {
-    const response = await fetch(`${API_BASE_URL}/container`)
+    const url = `${API_BASE_URL}/container`
+    console.log("📦 Fetching containers from:", url)
+    
+    const response = await fetch(url)
     if (!response.ok) throw new Error(`HTTP ${response.status}`)
 
     const result: ApiResponse<Container> = await response.json()
+    console.log("📦 Containers response:", result)
     return result.data || []
   }
 
@@ -193,12 +205,20 @@ export default function SensorData() {
       if (showLoading) setLoading(true)
 
       try {
+        console.log("🔄 Iniciando fetch dos dados da API...")
+        console.log("🌐 API_BASE_URL:", API_BASE_URL)
+        
         // Try to fetch real data
         const [measurementsData, sensorsData, containersData] = await Promise.all([
           fetchMeasurements({ limit: 100 }),
           fetchSensors(),
           fetchContainers(),
         ])
+
+        console.log("✅ Dados recebidos da API:")
+        console.log("📊 Measurements:", measurementsData)
+        console.log("🔧 Sensors:", sensorsData)
+        console.log("📦 Containers:", containersData)
 
         setMeasurements(measurementsData)
         setSensors(sensorsData)
@@ -210,8 +230,10 @@ export default function SensorData() {
           nextRetry: null,
           error: null,
         })
+        
+        console.log("🎉 Dados da API carregados com sucesso!")
       } catch (error) {
-        console.warn("API not available, using mock data:", error)
+        console.warn("⚠️ API not available, using mock data:", error)
 
         // Fallback to mock data
         const mockMeasurements = generateMockMeasurements()
@@ -225,6 +247,8 @@ export default function SensorData() {
           nextRetry: new Date(Date.now() + 30000), // Retry in 30 seconds
           error: error instanceof Error ? error.message : "Conexão não disponível",
         })
+        
+        console.log("🔄 Usando dados mock como fallback")
       } finally {
         setLoading(false)
       }

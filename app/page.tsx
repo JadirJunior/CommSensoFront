@@ -159,13 +159,13 @@ export default function Home() {
             </div>
           </div>
           <div className="md:w-1/2 flex justify-center">
-            <div className="relative w-full max-w-md aspect-video rounded-lg overflow-hidden shadow-xl">
+            <div className="relative w-full max-w-md aspect-square rounded-lg overflow-hidden shadow-xl">
               <Image
-                src="/placeholder.svg?height=400&width=600"
-                alt="Compostagem sustentável"
-                width={600}
-                height={400}
-                className="object-cover"
+                src="/CoMMSenso.png"
+                alt="Logo CoMMSenso - Consumo e Produção Sustentável"
+                width={500}
+                height={500}
+                className="object-contain bg-white p-4"
               />
             </div>
           </div>

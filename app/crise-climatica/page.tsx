@@ -102,8 +102,8 @@ export default function CriseClimatica() {
             </p>
             <div className="relative w-full max-w-2xl mx-auto aspect-video rounded-lg overflow-hidden shadow-xl mb-8">
               <Image
-                src="/placeholder.svg?height=400&width=800"
-                alt="Mudanças climáticas"
+                src="/Crise.png"
+                alt="Crise climática - paisagem devastada pela mudança climática"
                 width={800}
                 height={400}
                 className="object-cover"
