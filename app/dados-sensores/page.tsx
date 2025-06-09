@@ -446,14 +446,14 @@ export default function SensorData() {
 
   return (
     <div className="container mx-auto px-4 py-12 md:px-6">
-      {/* Header */}
+              {/* Cabeçalho */}
       <div className="flex flex-col lg:flex-row items-start lg:items-center justify-between mb-8 gap-4">
         <div>
           <h1 className="text-4xl font-bold mb-2">Monitoramento de Compostagem</h1>
           <p className="text-gray-600">Dados em Tempo Real</p>
         </div>
 
-        {/* Connection Status */}
+        {/* Status da Conexão */}
         <div className="flex items-center gap-4">
           <div
             className={`flex items-center gap-2 px-3 py-2 rounded-lg ${connectionStatus.isConnected ? "bg-green-50 text-green-700" : "bg-red-50 text-red-700"}`}
@@ -470,14 +470,14 @@ export default function SensorData() {
         </div>
       </div>
 
-      {/* Filters */}
+      {/* Filtros */}
       <Card className="mb-8">
         <CardHeader>
           <CardTitle>Filtros</CardTitle>
         </CardHeader>
         <CardContent>
           <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-4">
-            {/* Container Filter */}
+            {/* Filtro de Container */}
             <div>
               <label className="text-sm font-medium mb-2 block">Container</label>
               <Select value={selectedContainer} onValueChange={setSelectedContainer}>
@@ -495,7 +495,7 @@ export default function SensorData() {
               </Select>
             </div>
 
-            {/* Time Range Filter */}
+            {/* Filtro de Período */}
             <div>
               <label className="text-sm font-medium mb-2 block">Período</label>
               <Select value={selectedTimeRange} onValueChange={setSelectedTimeRange}>
@@ -511,7 +511,7 @@ export default function SensorData() {
               </Select>
             </div>
 
-            {/* Sensor Filters */}
+            {/* Filtros de Sensores */}
             <div className="md:col-span-2">
               <label className="text-sm font-medium mb-2 block">Sensores</label>
               <div className="flex flex-wrap gap-4">
@@ -546,7 +546,7 @@ export default function SensorData() {
         </CardContent>
       </Card>
 
-      {/* Latest Readings Cards */}
+      {/* Cartões de Leituras Recentes */}
       <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-4 mb-8">
         {["Temperatura Ambiente", "Umidade", "pH", "Nitrogênio"].map((sensorType) => {
           const reading = latestReadings.find((r) => r.sensor.name.toLowerCase().includes(sensorType.toLowerCase()))
@@ -603,7 +603,7 @@ export default function SensorData() {
         })}
       </div>
 
-      {/* Data Table */}
+      {/* Tabela de Dados */}
       <Card>
         <CardHeader>
           <CardTitle>Dados Detalhados ({filteredMeasurements.length} registros)</CardTitle>

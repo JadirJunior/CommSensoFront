@@ -137,7 +137,7 @@ export default function Home() {
 
   return (
     <div className="flex flex-col min-h-screen">
-      {/* Hero Section */}
+      {/* Seção Principal */}
       <section className="relative bg-gradient-to-r from-green-800 to-green-600 text-white py-20">
         <div className="container mx-auto px-4 md:px-6 flex flex-col md:flex-row items-center">
           <div className="md:w-1/2 mb-10 md:mb-0">
@@ -172,7 +172,7 @@ export default function Home() {
         </div>
       </section>
 
-      {/* Nossas Causas Section */}
+              {/* Seção Nossas Causas */}
       <section className="py-16 bg-white">
         <div className="container mx-auto px-4 md:px-6">
           <h2 className="text-3xl font-bold text-center mb-4">Nossas Causas</h2>
@@ -192,7 +192,7 @@ export default function Home() {
         </div>
       </section>
 
-      {/* Climate Crisis Section */}
+              {/* Seção Crise Climática */}
       <section className="py-16 bg-gray-50">
         <div className="container mx-auto px-4 md:px-6">
           <div className="max-w-3xl mx-auto text-center mb-12">
@@ -213,7 +213,7 @@ export default function Home() {
         </div>
       </section>
 
-      {/* 10 Sustainable Actions */}
+              {/* 10 Ações Sustentáveis */}
       <section className="py-16 bg-white">
         <div className="container mx-auto px-4 md:px-6">
           <h2 className="text-3xl font-bold text-center mb-12 text-gray-900">10 Ações Sustentáveis</h2>
@@ -240,7 +240,7 @@ export default function Home() {
         </div>
       </section>
 
-      {/* Faça sua Parte Section */}
+              {/* Seção Faça sua Parte */}
       <section className="py-16 bg-green-50">
         <div className="container mx-auto px-4 md:px-6">
           <div className="text-center mb-12">

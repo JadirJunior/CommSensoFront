@@ -3,17 +3,17 @@ import Image from "next/image"
 
 export default function Portfolio() {
   const identityImages = [
-    "/placeholder.svg?height=300&width=400",
-    "/placeholder.svg?height=300&width=400",
-    "/placeholder.svg?height=300&width=400",
-    "/placeholder.svg?height=300&width=400",
+    "/portfolio/identidade-visual-1.jpg",
+    "/portfolio/identidade-visual-2.jpg",
+    "/portfolio/identidade-visual-3.jpg",
+    "/portfolio/identidade-visual-4.jpg",
   ]
 
   const spaceImages = [
-    "/placeholder.svg?height=300&width=400",
-    "/placeholder.svg?height=300&width=400",
-    "/placeholder.svg?height=300&width=400",
-    "/placeholder.svg?height=300&width=400",
+    "/portfolio/espaco-compostagem-1.jpg",
+    "/portfolio/espaco-compostagem-2.jpg",
+    "/portfolio/espaco-compostagem-3.jpg",
+    "/portfolio/espaco-compostagem-4.jpg",
   ]
 
   return (
@@ -39,7 +39,7 @@ export default function Portfolio() {
             {identityImages.map((img, index) => (
               <div key={index} className="relative aspect-video rounded-lg overflow-hidden">
                 <Image
-                  src={img || "/placeholder.svg"}
+                  src={img}
                   alt={`Identidade visual ${index + 1}`}
                   fill
                   className="object-cover hover:scale-105 transition-transform duration-300"
@@ -63,7 +63,7 @@ export default function Portfolio() {
             {spaceImages.map((img, index) => (
               <div key={index} className="relative aspect-video rounded-lg overflow-hidden">
                 <Image
-                  src={img || "/placeholder.svg"}
+                  src={img}
                   alt={`Espaço de compostagem ${index + 1}`}
                   fill
                   className="object-cover hover:scale-105 transition-transform duration-300"

@@ -35,7 +35,7 @@ export default function Header() {
           </Link>
         </div>
 
-        {/* Desktop navigation */}
+        {/* Navegação Desktop */}
         <nav className="hidden md:flex items-center gap-6">
           {navigation.map((item) => (
             <div key={item.name}>
@@ -62,7 +62,7 @@ export default function Header() {
           ))}
         </nav>
 
-        {/* Mobile navigation */}
+        {/* Navegação Mobile */}
         <Sheet open={isOpen} onOpenChange={setIsOpen}>
           <SheetTrigger asChild className="md:hidden">
             <Button variant="ghost" size="icon" aria-label="Menu">

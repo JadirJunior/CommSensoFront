@@ -10,11 +10,11 @@ export default function OurTeam() {
       role: "Aluno do Curso de Engenharia de Computação",
       position: "Bolsista",
       bio: "Desenvolve soluções tecnológicas para monitoramento de compostagem, com foco em sensores IoT e análise de dados em tempo real.",
-      image: "/placeholder.svg?height=300&width=300",
+      image: "/team/jadir.jpg",
       social: {
-        email: "jadir@example.com",
-        github: "#",
-        linkedin: "#",
+        email: "jadir.borba@estudante.ifsp.edu.br",
+        github: "https://github.com/jadir-borba",
+        linkedin: "https://linkedin.com/in/jadir-borba",
       },
     },
     {
@@ -24,9 +24,9 @@ export default function OurTeam() {
       bio: "Responsável pelo desenvolvimento de interfaces e visualização de dados dos sensores, integrando tecnologia e sustentabilidade.",
       image: "/Lourenco.jpg",
       social: {
-        email: "lourenco@example.com",
-        github: "#",
-        linkedin: "#",
+        email: "lourenco.pereira@estudante.ifsp.edu.br",
+        github: "https://github.com/lourenco-pereira",
+        linkedin: "https://linkedin.com/in/lourenco-pereira",
       },
     },
     {
@@ -34,11 +34,11 @@ export default function OurTeam() {
       role: "Professora da Área de Informática",
       position: "Coordenadora",
       bio: "Especialista em tecnologias educacionais e sustentabilidade, lidera o projeto CoMMSenso com foco na integração de IoT e práticas sustentáveis.",
-      image: "/placeholder.svg?height=300&width=300",
+      image: "/team/helen.jpg",
       social: {
-        email: "helen@example.com",
-        linkedin: "#",
-        instagram: "#",
+        email: "helen.santos@ifsp.edu.br",
+        linkedin: "https://linkedin.com/in/helen-santos",
+        instagram: "https://instagram.com/helen.santos",
       },
     },
   ]
@@ -47,7 +47,7 @@ export default function OurTeam() {
     <div className="container mx-auto px-4 py-12 md:px-6">
       <h1 className="text-4xl font-bold text-center mb-6">Nosso Time</h1>
 
-      {/* About Section */}
+      {/* Seção Sobre */}
       <div className="max-w-4xl mx-auto mb-16">
         <h2 className="text-2xl font-bold mb-6 text-center">Sobre</h2>
         <div className="bg-green-50 rounded-lg p-8 text-center">
@@ -63,12 +63,12 @@ export default function OurTeam() {
         </div>
       </div>
 
-      {/* Team Members */}
+      {/* Membros da Equipe */}
       <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-8">
         {teamMembers.map((member, index) => (
           <Card key={index} className="overflow-hidden border-green-100 hover:shadow-lg transition-shadow">
             <div className="aspect-square relative">
-              <Image src={member.image || "/placeholder.svg"} alt={member.name} fill className="object-cover" />
+              <Image src={member.image} alt={member.name} fill className="object-cover" />
             </div>
             <CardContent className="p-6">
               <h3 className="text-xl font-bold mb-1">{member.name}</h3>

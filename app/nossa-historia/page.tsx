@@ -1,6 +1,5 @@
 import { Card, CardContent } from "@/components/ui/card"
 import Image from "next/image"
-import Link from "next/link"
 
 export default function OurHistory() {
   const historySteps = [
@@ -56,19 +55,19 @@ export default function OurHistory() {
   ]
 
   const references = [
-    { name: "Biocycle", logo: "/placeholder.svg?height=60&width=120" },
-    { name: "SWAFS", logo: "/placeholder.svg?height=60&width=120" },
-    { name: "Horizon 2020", logo: "/placeholder.svg?height=60&width=120" },
-    { name: "Food Wastage Footprint", logo: "/placeholder.svg?height=60&width=120" },
-    { name: "Aquífero Guarani", logo: "/placeholder.svg?height=60&width=120" },
-    { name: "ODS", logo: "/placeholder.svg?height=60&width=120" },
+    { name: "Biocycle", logo: "/referencias/biocycle-logo.jpg" },
+    { name: "SWAFS", logo: "/referencias/swafs-logo.jpg" },
+    { name: "Horizon 2020", logo: "/referencias/horizon2020-logo.jpg" },
+    { name: "Food Wastage Footprint", logo: "/referencias/food-wastage-logo.jpg" },
+    { name: "Aquífero Guarani", logo: "/referencias/aquifero-guarani-logo.jpg" },
+    { name: "ODS", logo: "/referencias/ods-logo.jpg" },
   ]
 
   return (
     <div className="container mx-auto px-4 py-12 md:px-6">
       <h1 className="text-4xl font-bold text-center mb-6">Nossa História</h1>
 
-      {/* Introduction */}
+      {/* Introdução */}
       <div className="max-w-4xl mx-auto prose prose-lg mb-12">
         <p className="text-lg text-gray-700 leading-relaxed">
           CoMMSenso surgiu a partir do Edital de Ação de Sustentabilidade, nº 273/2023, lançado pelo IFSP. Nós
@@ -83,21 +82,21 @@ export default function OurHistory() {
         </p>
       </div>
 
-      {/* Timeline */}
+              {/* Linha do Tempo */}
       <div className="relative">
-        {/* Timeline line */}
+                  {/* Linha da Cronologia */}
         <div className="absolute left-0 md:left-1/2 transform md:-translate-x-1/2 h-full w-1 bg-green-200"></div>
 
-        {/* Timeline items */}
+                  {/* Itens da Cronologia */}
         <div className="space-y-12">
           {historySteps.map((step, index) => (
             <div key={step.id} className="relative">
-              {/* Timeline dot */}
+                              {/* Ponto da Cronologia */}
               <div className="absolute left-0 md:left-1/2 transform -translate-x-1/2 -translate-y-4 w-8 h-8 rounded-full bg-green-600 flex items-center justify-center text-white font-bold">
                 {step.id}
               </div>
 
-              {/* Content */}
+                              {/* Conteúdo */}
               <div className={`md:w-5/12 ml-10 md:ml-0 ${index % 2 === 0 ? "md:mr-auto" : "md:ml-auto"}`}>
                 <Card className="border-green-100">
                   <CardContent className="p-6">
@@ -114,7 +113,7 @@ export default function OurHistory() {
         </div>
       </div>
 
-      {/* Mission Statement */}
+              {/* Declaração de Missão */}
       <section className="mt-20 bg-green-50 rounded-lg p-8">
         <div className="max-w-4xl mx-auto text-center">
           <h2 className="text-2xl font-bold mb-4 text-green-800">Nossa Missão</h2>
@@ -126,19 +125,18 @@ export default function OurHistory() {
         </div>
       </section>
 
-      {/* References */}
+              {/* Seção Referências */}
       <section className="mt-20">
         <h2 className="text-2xl font-bold text-center mb-8">Referências e Parcerias</h2>
         <div className="grid grid-cols-2 md:grid-cols-3 lg:grid-cols-6 gap-6">
           {references.map((ref, index) => (
-            <Link
+            <div
               key={index}
-              href="#"
               className="flex flex-col items-center justify-center p-4 border rounded-lg hover:shadow-md transition-shadow"
             >
-              <Image src={ref.logo || "/placeholder.svg"} alt={ref.name} width={120} height={60} className="mb-2" />
+                              <Image src={ref.logo} alt={ref.name} width={120} height={60} className="mb-2" />
               <span className="text-sm font-medium text-gray-700">{ref.name}</span>
-            </Link>
+            </div>
           ))}
         </div>
       </section>
