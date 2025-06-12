@@ -9,8 +9,8 @@ export default function OurTeam() {
       name: "Jadir Pires de Borba Junior",
       role: "Aluno do Curso de Engenharia de Computação",
       position: "Bolsista",
-      bio: "Desenvolve soluções tecnológicas para monitoramento de compostagem, com foco em sensores IoT e análise de dados em tempo real.",
-      image: "/team/jadir.jpg",
+      bio: "Aluno do Curso de Engenharia de Computação",
+      image: "/team/Jadir.jpeg",
       social: {
         email: "jadir.borba@estudante.ifsp.edu.br",
         github: "https://github.com/jadir-borba",
@@ -21,7 +21,7 @@ export default function OurTeam() {
       name: "Lourenço Henrique Neves Pereira",
       role: "Aluno do Curso de Engenharia de Computação",
       position: "Bolsista",
-      bio: "Responsável pelo desenvolvimento de interfaces e visualização de dados dos sensores, integrando tecnologia e sustentabilidade.",
+      bio: "Aluno do Curso de Engenharia de Computação",
       image: "/Lourenco.jpg",
       social: {
         email: "lourenco.pereira@estudante.ifsp.edu.br",
@@ -34,12 +34,20 @@ export default function OurTeam() {
       role: "Professora da Área de Informática",
       position: "Coordenadora",
       bio: "Especialista em tecnologias educacionais e sustentabilidade, lidera o projeto CoMMSenso com foco na integração de IoT e práticas sustentáveis.",
-      image: "/team/helen.jpg",
+      image: "/team/Helen.jpeg",
       social: {
         email: "helen.santos@ifsp.edu.br",
         linkedin: "https://linkedin.com/in/helen-santos",
         instagram: "https://instagram.com/helen.santos",
       },
+    },
+    {
+      name: "José Miguel Sábio",
+      role: "Bacharel e Licenciado em Educação Física",
+      position: "Pedagogo Pós-Graduado em Metodologia do Ensino Superior",
+      bio: "Experiência como Diretor de Relações do Trabalho na Secretaria de Desenvolvimento Econômico e Relações do Trabalho.",
+      image: "/team/Miguel.jpeg",
+      social: {},
     },
   ]
 
