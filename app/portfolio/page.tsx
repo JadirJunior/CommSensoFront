@@ -2,18 +2,21 @@ import { Tabs, TabsContent, TabsList, TabsTrigger } from "@/components/ui/tabs"
 import Image from "next/image"
 
 export default function Portfolio() {
+  // Imagens para "Como criamos nossa identidade"
   const identityImages = [
-    "/portfolio/identidade-visual-1.jpg",
-    "/portfolio/identidade-visual-2.jpg",
-    "/portfolio/identidade-visual-3.jpg",
-    "/portfolio/identidade-visual-4.jpg",
+    { src: "/logo1.png", alt: "Logo CoMMSenso - Versão 1" },
+    { src: "/logo2.png", alt: "Logo CoMMSenso - Versão 2" },
+    { src: "/logo4.png", alt: "Logo CoMMSenso - Versão 4" },
+    { src: "/CoMMSenso.png", alt: "Logo CoMMSenso - Versão Final" },
   ]
 
+  // Imagens para "Onde ficará nossa compostagem"
   const spaceImages = [
-    "/portfolio/espaco-compostagem-1.jpg",
-    "/portfolio/espaco-compostagem-2.jpg",
-    "/portfolio/espaco-compostagem-3.jpg",
-    "/portfolio/espaco-compostagem-4.jpg",
+    { src: "/+Compostagem.png", alt: "Processo de Compostagem" },
+    { src: "/CaixaComposto.png", alt: "Caixa de Composto" },
+    { src: "/EspacoCOmmsenso.png", alt: "Espaço do CoMMSenso" },
+    { src: "/pesoComposto.png", alt: "Pesagem do Composto" },
+    { src: "/shigueo.png", alt: "Equipe do Projeto" },
   ]
 
   return (
@@ -28,22 +31,34 @@ export default function Portfolio() {
 
         <TabsContent value="identity" className="space-y-6">
           <div className="prose max-w-none mb-8">
-            <p>
+            <p className="text-lg text-gray-700 leading-relaxed">
               Nossa identidade visual foi desenvolvida para refletir os valores do projeto: sustentabilidade, tecnologia
               e educação. Utilizamos tons de verde para representar a natureza e a compostagem, combinados com elementos
               tecnológicos que simbolizam os sensores e a inovação presente no projeto.
             </p>
+            <p className="text-lg text-gray-700 leading-relaxed">
+              O processo de criação envolveu várias iterações até chegarmos ao design final que melhor representa
+              nossa missão de conscientização, capacitação e monitoramento tecnológico da compostagem.
+            </p>
           </div>
 
-          <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
+          <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
             {identityImages.map((img, index) => (
-              <div key={index} className="relative aspect-video rounded-lg overflow-hidden">
-                <Image
-                  src={img}
-                  alt={`Identidade visual ${index + 1}`}
-                  fill
-                  className="object-cover hover:scale-105 transition-transform duration-300"
-                />
+              <div 
+                key={index} 
+                className="relative bg-white rounded-lg overflow-hidden shadow-lg border border-gray-200 p-4"
+              >
+                <div className="relative aspect-square w-full">
+                  <Image
+                    src={img.src}
+                    alt={img.alt}
+                    fill
+                    className="object-contain hover:scale-105 transition-transform duration-300"
+                  />
+                </div>
+                <div className="mt-4 text-center">
+                  <h3 className="text-sm font-medium text-gray-700">{img.alt}</h3>
+                </div>
               </div>
             ))}
           </div>
@@ -51,23 +66,35 @@ export default function Portfolio() {
 
         <TabsContent value="space" className="space-y-6">
           <div className="prose max-w-none mb-8">
-            <p>
+            <p className="text-lg text-gray-700 leading-relaxed">
               O espaço físico para nossa compostagem está sendo implementado no campus do IFSP Birigui. Foi projetado
               para ser um ambiente educativo, onde os alunos podem aprender na prática sobre compostagem e monitoramento
               por sensores. O espaço conta com diferentes recipientes de compostagem, todos equipados com sensores para
               coleta de dados em tempo real.
             </p>
+            <p className="text-lg text-gray-700 leading-relaxed">
+              Acompanhe nossa jornada desde a instalação dos equipamentos até a operação completa do sistema de
+              compostagem inteligente, incluindo a participação ativa da comunidade acadêmica.
+            </p>
           </div>
 
-          <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
+          <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
             {spaceImages.map((img, index) => (
-              <div key={index} className="relative aspect-video rounded-lg overflow-hidden">
-                <Image
-                  src={img}
-                  alt={`Espaço de compostagem ${index + 1}`}
-                  fill
-                  className="object-cover hover:scale-105 transition-transform duration-300"
-                />
+              <div 
+                key={index} 
+                className="relative bg-white rounded-lg overflow-hidden shadow-lg border border-gray-200"
+              >
+                <div className="relative aspect-video w-full">
+                  <Image
+                    src={img.src}
+                    alt={img.alt}
+                    fill
+                    className="object-cover hover:scale-105 transition-transform duration-300"
+                  />
+                </div>
+                <div className="p-4">
+                  <h3 className="text-sm font-medium text-gray-700 text-center">{img.alt}</h3>
+                </div>
               </div>
             ))}
           </div>
