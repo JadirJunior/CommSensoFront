@@ -1,5 +1,6 @@
 import { Card, CardContent } from "@/components/ui/card"
 import Image from "next/image"
+import Link from "next/link"
 
 export default function OurHistory() {
   const historySteps = [
@@ -54,13 +55,62 @@ export default function OurHistory() {
     },
   ]
 
-  const references = [
-    { name: "Biocycle", logo: "/referencias/biocycle-logo.jpg" },
-    { name: "SWAFS", logo: "/referencias/swafs-logo.jpg" },
-    { name: "Horizon 2020", logo: "/referencias/horizon2020-logo.jpg" },
-    { name: "Food Wastage Footprint", logo: "/referencias/food-wastage-logo.jpg" },
-    { name: "Aquífero Guarani", logo: "/referencias/aquifero-guarani-logo.jpg" },
-    { name: "ODS", logo: "/referencias/ods-logo.jpg" },
+  // Primeira linha de referências
+  const firstRowReferences = [
+    { 
+      name: "BioCycle", 
+      logo: "/BioCycle.png",
+      link: "https://www.biocycle.net/composting-at-multifamily-dwellings-in-brazil/?fbclid=IwAR2oHcyqSlePEieXJO2vm3jpunMSkJqcvpZTijgLeliyD-0t6kcgVtOjoO8"
+    },
+    { 
+      name: "SFI", 
+      logo: "/SFI.png",
+      link: "https://www.sfi.ie/"
+    },
+    { 
+      name: "Horizon 2020", 
+      logo: "/Horizon2020.png",
+      link: "https://research-and-innovation.ec.europa.eu/funding/funding-opportunities/funding-programmes-and-open-calls/horizon-2020_en"
+    },
+    { 
+      name: "Food Wastage Footprint", 
+      logo: "/FoodWastage.png",
+      link: "https://reliefweb.int/report/world/food-wastage-footprint-impacts-natural-resources"
+    },
+    { 
+      name: "Resíduos Orgânicos", 
+      logo: "/residuo-organico.png",
+      link: "https://antigo.mma.gov.br/cidades-sustentaveis/residuos-solidos/gest%C3%A3o-de-res%C3%ADduos-org%C3%A2nicos.html#:~:text=Somados%20aos%20res%C3%ADduos%20org%C3%A2nicos%20provenientes,de%20toneladas%20de%20res%C3%ADduos%20org%C3%A2nicos"
+    },
+  ]
+
+  // Segunda linha de referências
+  const secondRowReferences = [
+    { 
+      name: "Aquífero Guarani", 
+      logo: "/guarani.png",
+      link: "https://giganteguarani.org.br/aquifero-guarani/#:~:text=O Aquífero Guarani%2C encontra-se,parcialmente%2C cerca de 200 cidades"
+    },
+    { 
+      name: "Desenvolvimento Sustentável", 
+      logo: "/Desenvolvimento.png",
+      link: "https://brasil.un.org/pt-br/sdgs"
+    },
+    { 
+      name: "ODS 12", 
+      logo: "/12ods.png",
+      link: "https://brasil.un.org/pt-br/sdgs/12"
+    },
+    { 
+      name: "Bora Compostar", 
+      logo: "/bora.png",
+      link: "https://ghelt.maxapex.net/apex/f?p=114:57:11748462761943:::::&tz=-3:00"
+    },
+    { 
+      name: "Civis", 
+      logo: "/civis.png",
+      link: "https://civis.ibict.br/pt-br/"
+    },
   ]
 
   return (
@@ -82,21 +132,21 @@ export default function OurHistory() {
         </p>
       </div>
 
-              {/* Linha do Tempo */}
+      {/* Linha do Tempo */}
       <div className="relative">
-                  {/* Linha da Cronologia */}
+        {/* Linha da Cronologia */}
         <div className="absolute left-0 md:left-1/2 transform md:-translate-x-1/2 h-full w-1 bg-green-200"></div>
 
-                  {/* Itens da Cronologia */}
+        {/* Itens da Cronologia */}
         <div className="space-y-12">
           {historySteps.map((step, index) => (
             <div key={step.id} className="relative">
-                              {/* Ponto da Cronologia */}
+              {/* Ponto da Cronologia */}
               <div className="absolute left-0 md:left-1/2 transform -translate-x-1/2 -translate-y-4 w-8 h-8 rounded-full bg-green-600 flex items-center justify-center text-white font-bold">
                 {step.id}
               </div>
 
-                              {/* Conteúdo */}
+              {/* Conteúdo */}
               <div className={`md:w-5/12 ml-10 md:ml-0 ${index % 2 === 0 ? "md:mr-auto" : "md:ml-auto"}`}>
                 <Card className="border-green-100">
                   <CardContent className="p-6">
@@ -113,7 +163,7 @@ export default function OurHistory() {
         </div>
       </div>
 
-              {/* Declaração de Missão */}
+      {/* Declaração de Missão */}
       <section className="mt-20 bg-green-50 rounded-lg p-8">
         <div className="max-w-4xl mx-auto text-center">
           <h2 className="text-2xl font-bold mb-4 text-green-800">Nossa Missão</h2>
@@ -125,18 +175,65 @@ export default function OurHistory() {
         </div>
       </section>
 
-              {/* Seção Referências */}
+      {/* Seção Referências e Parcerias */}
       <section className="mt-20">
         <h2 className="text-2xl font-bold text-center mb-8">Referências e Parcerias</h2>
-        <div className="grid grid-cols-2 md:grid-cols-3 lg:grid-cols-6 gap-6">
-          {references.map((ref, index) => (
-            <div
+        
+        {/* Primeira linha de referências */}
+        <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 xl:grid-cols-5 gap-6 mb-8">
+          {firstRowReferences.map((ref, index) => (
+            <Link
               key={index}
-              className="flex flex-col items-center justify-center p-4 border rounded-lg hover:shadow-md transition-shadow"
+              href={ref.link}
+              target="_blank"
+              rel="noopener noreferrer"
+              className="group"
             >
-                              <Image src={ref.logo} alt={ref.name} width={120} height={60} className="mb-2" />
-              <span className="text-sm font-medium text-gray-700">{ref.name}</span>
-            </div>
+              <Card className="border-green-100 hover:shadow-lg transition-all duration-300 hover:scale-105 cursor-pointer h-full">
+                <CardContent className="p-6 flex flex-col items-center justify-center text-center h-full">
+                  <div className="relative w-24 h-24 mb-4 flex items-center justify-center">
+                    <Image 
+                      src={ref.logo} 
+                      alt={ref.name} 
+                      fill
+                      className="object-contain group-hover:opacity-80 transition-opacity" 
+                    />
+                  </div>
+                  <span className="text-sm font-medium text-gray-700 group-hover:text-green-600 transition-colors">
+                    {ref.name}
+                  </span>
+                </CardContent>
+              </Card>
+            </Link>
+          ))}
+        </div>
+
+        {/* Segunda linha de referências */}
+        <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 xl:grid-cols-5 gap-6">
+          {secondRowReferences.map((ref, index) => (
+            <Link
+              key={index}
+              href={ref.link}
+              target="_blank"
+              rel="noopener noreferrer"
+              className="group"
+            >
+              <Card className="border-green-100 hover:shadow-lg transition-all duration-300 hover:scale-105 cursor-pointer h-full">
+                <CardContent className="p-6 flex flex-col items-center justify-center text-center h-full">
+                  <div className="relative w-24 h-24 mb-4 flex items-center justify-center">
+                    <Image 
+                      src={ref.logo} 
+                      alt={ref.name} 
+                      fill
+                      className="object-contain group-hover:opacity-80 transition-opacity" 
+                    />
+                  </div>
+                  <span className="text-sm font-medium text-gray-700 group-hover:text-green-600 transition-colors">
+                    {ref.name}
+                  </span>
+                </CardContent>
+              </Card>
+            </Link>
           ))}
         </div>
       </section>
