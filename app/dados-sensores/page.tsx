@@ -115,6 +115,7 @@ export default function SensorData() {
 
   // API Configuration - CommSensoRest Production
   const API_BASE_URL = process.env.NEXT_PUBLIC_API_URL || "http://137.131.153.111:3000"
+  const USE_PROXY = process.env.NEXT_PUBLIC_USE_PROXY === "true" || process.env.NODE_ENV === "production"
 
   // Mock data for development/offline mode - Based on real API structure
   const mockSensors: Sensor[] = [
@@ -182,6 +183,42 @@ export default function SensorData() {
     return measurements.sort((a, b) => new Date(b.dtMeasure).getTime() - new Date(a.dtMeasure).getTime())
   }, [])
 
+  // API utility function - handles proxy routing
+  const makeApiRequest = async (endpoint: string, queryParams: URLSearchParams = new URLSearchParams()) => {
+    let url: string
+    
+    if (USE_PROXY) {
+      // Use internal proxy in production to avoid CORS/Mixed Content issues
+      const proxyParams = new URLSearchParams()
+      proxyParams.append('endpoint', endpoint)
+      
+      // Add original query params to proxy request
+      queryParams.forEach((value, key) => {
+        proxyParams.append(key, value)
+      })
+      
+      url = `/api/proxy?${proxyParams.toString()}`
+      console.log('🔄 Using proxy:', url)
+    } else {
+      // Direct API call in development
+      url = `${API_BASE_URL}${endpoint}${queryParams.toString() ? `?${queryParams.toString()}` : ''}`
+      console.log('🔄 Direct API call:', url)
+    }
+
+    const response = await fetch(url, {
+      method: 'GET',
+      headers: {
+        'Content-Type': 'application/json',
+      },
+    })
+    
+    if (!response.ok) {
+      throw new Error(`HTTP ${response.status}: ${response.statusText}`)
+    }
+
+    return await response.json()
+  }
+
   // API Functions
   const fetchMeasurements = async (filters: { container?: string; limit?: number } = {}): Promise<Measurement[]> => {
     const params = new URLSearchParams()
@@ -198,21 +235,9 @@ export default function SensorData() {
     
     // NOTE: sensor filter may not work correctly in API - filtering on frontend instead
 
-    const url = `${API_BASE_URL}/measure${params.toString() ? `?${params}` : ''}`
-    console.log("📊 Fetching measurements from:", url)
+    console.log("📊 Fetching measurements...")
     
-    const response = await fetch(url, {
-      method: 'GET',
-      headers: {
-        'Content-Type': 'application/json',
-      },
-    })
-    
-    if (!response.ok) {
-      throw new Error(`HTTP ${response.status}: ${response.statusText}`)
-    }
-
-    const result: ApiResponse<Measurement> = await response.json()
+    const result: ApiResponse<Measurement> = await makeApiRequest('/measure', params)
     console.log("📊 Measurements response:", result)
     
     if (!result.data || !Array.isArray(result.data)) {
@@ -224,21 +249,9 @@ export default function SensorData() {
   }
 
   const fetchSensors = async (): Promise<Sensor[]> => {
-    const url = `${API_BASE_URL}/sensores`
-    console.log("🔧 Fetching sensors from:", url)
+    console.log("🔧 Fetching sensors...")
     
-    const response = await fetch(url, {
-      method: 'GET',
-      headers: {
-        'Content-Type': 'application/json',
-      },
-    })
-    
-    if (!response.ok) {
-      throw new Error(`HTTP ${response.status}: ${response.statusText}`)
-    }
-
-    const result: ApiResponse<Sensor> = await response.json()
+    const result: ApiResponse<Sensor> = await makeApiRequest('/sensores')
     console.log("🔧 Sensors response:", result)
     
     if (!result.data || !Array.isArray(result.data)) {
@@ -250,21 +263,9 @@ export default function SensorData() {
   }
 
   const fetchContainers = async (): Promise<Container[]> => {
-    const url = `${API_BASE_URL}/container`
-    console.log("📦 Fetching containers from:", url)
+    console.log("📦 Fetching containers...")
     
-    const response = await fetch(url, {
-      method: 'GET',
-      headers: {
-        'Content-Type': 'application/json',
-      },
-    })
-    
-    if (!response.ok) {
-      throw new Error(`HTTP ${response.status}: ${response.statusText}`)
-    }
-
-    const result: ApiResponse<Container> = await response.json()
+    const result: ApiResponse<Container> = await makeApiRequest('/container')
     console.log("📦 Containers response:", result)
     
     if (!result.data || !Array.isArray(result.data)) {
