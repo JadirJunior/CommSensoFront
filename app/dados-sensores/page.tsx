@@ -187,6 +187,12 @@ export default function SensorData() {
   const makeApiRequest = async (endpoint: string, queryParams: URLSearchParams = new URLSearchParams()) => {
     let url: string
     
+    console.log('🌐 Environment check:', {
+      NODE_ENV: process.env.NODE_ENV,
+      USE_PROXY,
+      API_BASE_URL
+    })
+    
     if (USE_PROXY) {
       // Use internal proxy in production to avoid CORS/Mixed Content issues
       const proxyParams = new URLSearchParams()
@@ -205,6 +211,7 @@ export default function SensorData() {
       console.log('🔄 Direct API call:', url)
     }
 
+    console.log('📡 Making fetch request...')
     const response = await fetch(url, {
       method: 'GET',
       headers: {
@@ -212,11 +219,21 @@ export default function SensorData() {
       },
     })
     
+    console.log('📡 Response received:', {
+      status: response.status,
+      statusText: response.statusText,
+      ok: response.ok
+    })
+    
     if (!response.ok) {
-      throw new Error(`HTTP ${response.status}: ${response.statusText}`)
+      const errorText = await response.text()
+      console.error('❌ Request failed:', errorText)
+      throw new Error(`HTTP ${response.status}: ${response.statusText} - ${errorText}`)
     }
 
-    return await response.json()
+    const data = await response.json()
+    console.log('✅ Data received successfully')
+    return data
   }
 
   // API Functions
