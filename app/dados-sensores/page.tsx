@@ -1,5 +1,25 @@
 "use client"
 
+/**
+ * Sistema de Monitoramento de Compostagem - CommSenso IFSP Birigui
+ * 
+ * Esta página integra com a API REST CommSensoRest para monitorar em tempo real
+ * os dados de sensores IoT utilizados no processo de compostagem.
+ * 
+ * Sensores monitorados:
+ * - Temperatura (°C) - Normal: 15-40°C (ambiente)
+ * - Umidade (%) - Normal: 40-85%
+ * - pH - Normal: 5.5-8.5
+ * - Nitrogênio (mg/kg) - Normal: >50
+ * - Fósforo (mg/kg) - Normal: >50
+ * - Potássio (mg/kg) - Normal: >50
+ * - Condutividade (uS) - Normal: 200-1500
+ * 
+ * API Base: http://137.131.153.111:3000
+ * Atualização: A cada 30 segundos
+ * Fallback: Dados mock quando API indisponível
+ */
+
 import { useEffect, useState, useCallback } from "react"
 import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card"
 import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from "@/components/ui/select"
@@ -62,6 +82,9 @@ interface SensorFilter {
   umidade: boolean
   ph: boolean
   nitrogenio: boolean
+  fosforo: boolean
+  potassio: boolean
+  condutividade: boolean
 }
 
 export default function SensorData() {
@@ -85,26 +108,27 @@ export default function SensorData() {
     umidade: true,
     ph: true,
     nitrogenio: true,
+    fosforo: true,
+    potassio: true,
+    condutividade: true,
   })
 
-  // API Configuration
-  const API_BASE_URL = process.env.NEXT_PUBLIC_API_URL || "http://localhost:3000"
+  // API Configuration - CommSensoRest Production
+  const API_BASE_URL = process.env.NEXT_PUBLIC_API_URL || "http://137.131.153.111:3000"
 
-  // Mock data for development/offline mode
+  // Mock data for development/offline mode - Based on real API structure
   const mockSensors: Sensor[] = [
-    { id: 1, name: "Temperatura Ambiente", unit: "°C" },
+    { id: 1, name: "Temperatura", unit: "ºC" },
     { id: 2, name: "Umidade", unit: "%" },
-    { id: 3, name: "pH", unit: "pH" },
-    { id: 4, name: "Nitrogênio", unit: "mg/kg" },
-    { id: 5, name: "Potássio", unit: "mg/kg" },
-    { id: 6, name: "Fósforo", unit: "mg/kg" },
-    { id: 7, name: "Condutividade", unit: "µS/cm" },
+    { id: 3, name: "Condutividade", unit: "uS" },
+    { id: 4, name: "Ph", unit: "" },
+    { id: 5, name: "Nitrogenio", unit: "mg/kg" },
+    { id: 6, name: "Fosforo", unit: "mg/kg" },
+    { id: 7, name: "Potássio", unit: "mg/kg" },
   ]
 
   const mockContainers: Container[] = [
-    { id: 1, name: "Container A", weigth: 50.5, valid: true },
-    { id: 2, name: "Container B", weigth: 45.2, valid: true },
-    { id: 3, name: "Container C", weigth: 38.7, valid: false },
+    { id: 1, name: "amostra", weigth: 1, valid: false },
   ]
 
   // Generate mock measurements for offline mode
@@ -161,42 +185,94 @@ export default function SensorData() {
   // API Functions
   const fetchMeasurements = async (filters: { container?: string; limit?: number } = {}): Promise<Measurement[]> => {
     const params = new URLSearchParams()
-    if (filters.container && filters.container !== "all") params.append("container", filters.container)
-    if (filters.limit) params.append("limit", filters.limit.toString())
+    
+    // Filter by container - use container name as string
+    if (filters.container && filters.container !== "all") {
+      params.append("container", filters.container)
+    }
+    
+    // Set limit for pagination
+    if (filters.limit) {
+      params.append("limit", filters.limit.toString())
+    }
+    
+    // NOTE: sensor filter may not work correctly in API - filtering on frontend instead
 
-    const url = `${API_BASE_URL}/measure?${params}`
+    const url = `${API_BASE_URL}/measure${params.toString() ? `?${params}` : ''}`
     console.log("📊 Fetching measurements from:", url)
     
-    const response = await fetch(url)
-    if (!response.ok) throw new Error(`HTTP ${response.status}`)
+    const response = await fetch(url, {
+      method: 'GET',
+      headers: {
+        'Content-Type': 'application/json',
+      },
+    })
+    
+    if (!response.ok) {
+      throw new Error(`HTTP ${response.status}: ${response.statusText}`)
+    }
 
     const result: ApiResponse<Measurement> = await response.json()
     console.log("📊 Measurements response:", result)
-    return result.data || []
+    
+    if (!result.data || !Array.isArray(result.data)) {
+      console.warn("⚠️ API returned unexpected data format:", result)
+      return []
+    }
+    
+    return result.data
   }
 
   const fetchSensors = async (): Promise<Sensor[]> => {
     const url = `${API_BASE_URL}/sensores`
     console.log("🔧 Fetching sensors from:", url)
     
-    const response = await fetch(url)
-    if (!response.ok) throw new Error(`HTTP ${response.status}`)
+    const response = await fetch(url, {
+      method: 'GET',
+      headers: {
+        'Content-Type': 'application/json',
+      },
+    })
+    
+    if (!response.ok) {
+      throw new Error(`HTTP ${response.status}: ${response.statusText}`)
+    }
 
     const result: ApiResponse<Sensor> = await response.json()
     console.log("🔧 Sensors response:", result)
-    return result.data || []
+    
+    if (!result.data || !Array.isArray(result.data)) {
+      console.warn("⚠️ API returned unexpected sensors data format:", result)
+      return []
+    }
+    
+    return result.data
   }
 
   const fetchContainers = async (): Promise<Container[]> => {
     const url = `${API_BASE_URL}/container`
     console.log("📦 Fetching containers from:", url)
     
-    const response = await fetch(url)
-    if (!response.ok) throw new Error(`HTTP ${response.status}`)
+    const response = await fetch(url, {
+      method: 'GET',
+      headers: {
+        'Content-Type': 'application/json',
+      },
+    })
+    
+    if (!response.ok) {
+      throw new Error(`HTTP ${response.status}: ${response.statusText}`)
+    }
 
     const result: ApiResponse<Container> = await response.json()
     console.log("📦 Containers response:", result)
-    return result.data || []
+    
+    if (!result.data || !Array.isArray(result.data)) {
+      console.warn("⚠️ API returned unexpected containers data format:", result)
+      return []
+    }
+    
+    return result.data
   }
 
   // Main data fetching function
@@ -262,42 +338,60 @@ export default function SensorData() {
 
     const interval = setInterval(() => {
       fetchData(false)
-    }, 10000) // Refresh every 10 seconds
+    }, 30000) // Refresh every 30 seconds - optimal for compost monitoring
 
     return () => clearInterval(interval)
   }, [fetchData])
 
-  // Get sensor icon
+  // Get sensor icon - Updated for real API sensor names
   const getSensorIcon = (sensorName: string) => {
     const name = sensorName.toLowerCase()
     if (name.includes("temperatura")) return <Thermometer className="h-6 w-6 text-orange-500" />
     if (name.includes("umidade")) return <Droplets className="h-6 w-6 text-blue-500" />
     if (name.includes("ph")) return <Flask className="h-6 w-6 text-purple-500" />
-    if (name.includes("nitrogênio") || name.includes("nitrogenio")) return <Leaf className="h-6 w-6 text-green-500" />
+    if (name.includes("nitrogenio")) return <Leaf className="h-6 w-6 text-green-500" />
     if (name.includes("potássio") || name.includes("potassio")) return <Leaf className="h-6 w-6 text-green-600" />
-    if (name.includes("fósforo") || name.includes("fosforo")) return <Leaf className="h-6 w-6 text-green-700" />
+    if (name.includes("fosforo") || name.includes("fósforo")) return <Leaf className="h-6 w-6 text-green-700" />
+    if (name.includes("condutividade")) return <Wifi className="h-6 w-6 text-cyan-500" />
     return <Database className="h-6 w-6 text-gray-500" />
   }
 
-  // Get sensor status based on value
+  // Get sensor status based on value - Adjusted for realistic monitoring ranges
   const getSensorStatus = (sensorName: string, value: number) => {
     const name = sensorName.toLowerCase()
 
+    // Temperature: Monitoring ambient temperature around compost area
     if (name.includes("temperatura")) {
-      if (value < 20 || value > 35) return "warning"
-      if (value < 15 || value > 40) return "critical"
+      if (value < 15 || value > 40) return "warning"
+      if (value < 5 || value > 50) return "critical"
       return "normal"
     }
 
+    // Humidity: Good range for compost environment monitoring
     if (name.includes("umidade")) {
-      if (value < 40 || value > 80) return "warning"
-      if (value < 30 || value > 90) return "critical"
+      if (value < 40 || value > 85) return "warning"
+      if (value < 20 || value > 95) return "critical"
       return "normal"
     }
 
+    // pH: Suitable range for compost maturation and soil health
     if (name.includes("ph")) {
       if (value < 5.5 || value > 8.5) return "warning"
       if (value < 4.5 || value > 9.5) return "critical"
+      return "normal"
+    }
+
+    // Conductivity: Indicates nutrient content and soil health
+    if (name.includes("condutividade")) {
+      if (value < 200 || value > 1500) return "warning"
+      if (value < 100 || value > 2000) return "critical"
+      return "normal"
+    }
+
+    // Nutrients: Realistic ranges for compost nutrient content
+    if (name.includes("nitrogenio") || name.includes("fosforo") || name.includes("fósforo") || name.includes("potassio") || name.includes("potássio")) {
+      if (value < 50) return "warning"
+      if (value < 25) return "critical"
       return "normal"
     }
 
@@ -330,8 +424,10 @@ export default function SensorData() {
     if (sensorName.includes("temperatura") && !sensorFilters.temperatura) return false
     if (sensorName.includes("umidade") && !sensorFilters.umidade) return false
     if (sensorName.includes("ph") && !sensorFilters.ph) return false
-    if ((sensorName.includes("nitrogênio") || sensorName.includes("nitrogenio")) && !sensorFilters.nitrogenio)
-      return false
+    if (sensorName.includes("nitrogenio") && !sensorFilters.nitrogenio) return false
+    if ((sensorName.includes("fosforo") || sensorName.includes("fósforo")) && !sensorFilters.fosforo) return false
+    if ((sensorName.includes("potassio") || sensorName.includes("potássio")) && !sensorFilters.potassio) return false
+    if (sensorName.includes("condutividade") && !sensorFilters.condutividade) return false
 
     // Time range filter
     const measureDate = new Date(measurement.dtMeasure)
@@ -404,8 +500,11 @@ export default function SensorData() {
         <div className="flex items-center justify-center min-h-[60vh]">
           <div className="text-center">
             <RefreshCw className="h-12 w-12 animate-spin text-green-600 mx-auto mb-4" />
-            <h2 className="text-2xl font-bold mb-2">Carregando dados dos sensores...</h2>
-            <p className="text-gray-600">Conectando com o sistema de monitoramento</p>
+            <h2 className="text-2xl font-bold mb-2">🌱 Carregando dados da compostagem...</h2>
+            <p className="text-gray-600">Conectando com API CommSensoRest - IFSP Birigui</p>
+            <div className="mt-4 text-sm text-gray-500">
+              <p>Coletando dados de temperatura, umidade, pH e nutrientes</p>
+            </div>
           </div>
         </div>
       </div>
@@ -418,14 +517,14 @@ export default function SensorData() {
       <div className="container mx-auto px-4 py-12 md:px-6">
         <div className="text-center max-w-2xl mx-auto">
           <Database className="h-16 w-16 text-gray-400 mx-auto mb-6" />
-          <h2 className="text-2xl font-bold mb-4">🔍 Nenhum dado disponível no momento</h2>
-          <div className="bg-gray-50 rounded-lg p-6 mb-6">
-            <h3 className="font-semibold mb-3">Possíveis causas:</h3>
-            <ul className="text-left space-y-2 text-gray-600">
-              <li>• Sensores desconectados</li>
-              <li>• Problemas na conexão MQTT</li>
-              <li>• Containers inativos</li>
-              <li>• Filtros muito restritivos</li>
+          <h2 className="text-2xl font-bold mb-4">🌱 Sistema de Monitoramento da Compostagem</h2>
+          <div className="bg-green-50 rounded-lg p-6 mb-6 border border-green-200">
+            <h3 className="font-semibold mb-3 text-green-800">Status do Sistema:</h3>
+            <ul className="text-left space-y-2 text-green-700">
+              <li>• Conectando com sensores IoT da compostagem...</li>
+              <li>• Verificando comunicação MQTT com containers</li>
+              <li>• Sincronizando dados de temperatura, umidade, pH e nutrientes</li>
+              <li>• Sistema do projeto CommSenso - IFSP Birigui</li>
             </ul>
           </div>
           {connectionStatus.lastUpdate && (
@@ -515,20 +614,32 @@ export default function SensorData() {
             <div className="md:col-span-2">
               <label className="text-sm font-medium mb-2 block">Sensores</label>
               <div className="flex flex-wrap gap-4">
-                {Object.entries(sensorFilters).map(([key, value]) => (
-                  <div key={key} className="flex items-center space-x-2">
-                    <Checkbox
-                      id={key}
-                      checked={value}
-                      onCheckedChange={(checked) =>
-                        setSensorFilters((prev) => ({ ...prev, [key]: checked as boolean }))
-                      }
-                    />
-                    <label htmlFor={key} className="text-sm capitalize">
-                      {key === "nitrogenio" ? "Nitrogênio" : key}
-                    </label>
-                  </div>
-                ))}
+                {Object.entries(sensorFilters).map(([key, value]) => {
+                  const displayName = {
+                    temperatura: "Temperatura",
+                    umidade: "Umidade", 
+                    ph: "pH",
+                    nitrogenio: "Nitrogênio",
+                    fosforo: "Fósforo",
+                    potassio: "Potássio",
+                    condutividade: "Condutividade"
+                  }[key] || key
+                  
+                  return (
+                    <div key={key} className="flex items-center space-x-2">
+                      <Checkbox
+                        id={key}
+                        checked={value}
+                        onCheckedChange={(checked) =>
+                          setSensorFilters((prev) => ({ ...prev, [key]: checked as boolean }))
+                        }
+                      />
+                      <label htmlFor={key} className="text-sm">
+                        {displayName}
+                      </label>
+                    </div>
+                  )
+                })}
               </div>
             </div>
           </div>
@@ -548,7 +659,7 @@ export default function SensorData() {
 
       {/* Cartões de Leituras Recentes */}
       <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-4 mb-8">
-        {["Temperatura Ambiente", "Umidade", "pH", "Nitrogênio"].map((sensorType) => {
+        {["Temperatura", "Umidade", "Ph", "Nitrogenio"].map((sensorType) => {
           const reading = latestReadings.find((r) => r.sensor.name.toLowerCase().includes(sensorType.toLowerCase()))
 
           if (!reading) {
@@ -579,6 +690,63 @@ export default function SensorData() {
                 <CardTitle className="text-lg flex items-center gap-2">
                   {getSensorIcon(reading.sensor.name)}
                   {sensorType}
+                </CardTitle>
+              </CardHeader>
+              <CardContent>
+                <div className="flex justify-between items-end">
+                  <div>
+                    <div className="text-3xl font-bold">
+                      {reading.value} <span className="text-sm font-normal">{reading.sensor.unit}</span>
+                    </div>
+                    <div className={`flex items-center gap-1 text-sm ${statusDisplay.color}`}>
+                      {statusDisplay.icon}
+                      {status === "normal" ? "Normal" : status === "warning" ? "Atenção" : "Crítico"}
+                    </div>
+                  </div>
+                  <div className="text-xs text-gray-500 text-right">
+                    <div>{reading.container.name}</div>
+                    <div>{format(new Date(reading.dtMeasure), "dd/MM HH:mm", { locale: ptBR })}</div>
+                  </div>
+                </div>
+              </CardContent>
+            </Card>
+          )
+        })}
+      </div>
+
+      {/* Cartões de Sensores Nutricionais */}
+      <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-4 mb-8">
+        {["Fosforo", "Potássio", "Condutividade"].map((sensorType) => {
+          const reading = latestReadings.find((r) => r.sensor.name.toLowerCase().includes(sensorType.toLowerCase()))
+
+          if (!reading) {
+            return (
+              <Card key={sensorType} className="border-gray-200">
+                <CardHeader className="pb-2">
+                  <CardTitle className="text-lg flex items-center gap-2">
+                    {getSensorIcon(sensorType)}
+                    {sensorType === "Fosforo" ? "Fósforo" : sensorType}
+                  </CardTitle>
+                </CardHeader>
+                <CardContent>
+                  <div className="text-center text-gray-500">
+                    <p>Sem dados</p>
+                  </div>
+                </CardContent>
+              </Card>
+            )
+          }
+
+          const value = Number.parseFloat(reading.value)
+          const status = getSensorStatus(reading.sensor.name, value)
+          const statusDisplay = getStatusDisplay(status)
+
+          return (
+            <Card key={sensorType} className="border-green-100">
+              <CardHeader className="pb-2">
+                <CardTitle className="text-lg flex items-center gap-2">
+                  {getSensorIcon(reading.sensor.name)}
+                  {sensorType === "Fosforo" ? "Fósforo" : sensorType}
                 </CardTitle>
               </CardHeader>
               <CardContent>
