@@ -99,7 +99,7 @@ export default function SensorData() {
 
 	// --- LÓGICA DE API ---
 	const API_BASE_URL =
-		process.env.NEXT_PUBLIC_API_URL || "http://137.131.153.111:3000";
+		process.env.COMMSENSO_API_URL || "http://137.131.153.111:3000";
 
 	const makeApiRequest = useCallback(
 		async (
@@ -164,8 +164,6 @@ export default function SensorData() {
 		async (showLoadingSpinner = false, showToast = false) => {
 			if (showLoadingSpinner) setLoading(true);
 			try {
-				console.log("Filtros: ", sensorFilters);
-
 				const [measurementsResult, containersData] = await Promise.all([
 					fetchMeasurements(
 						currentPage,
