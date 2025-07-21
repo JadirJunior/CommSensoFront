@@ -1,32 +1,40 @@
-import type React from "react"
-import type { Metadata } from "next"
-import { Inter } from "next/font/google"
-import "./globals.css"
-import { ThemeProvider } from "@/components/theme-provider"
-import Header from "@/components/header"
-import Footer from "@/components/footer"
+import type React from "react";
+import type { Metadata } from "next";
+import { Inter } from "next/font/google";
+import "./globals.css";
+import { ThemeProvider } from "@/components/theme-provider";
+import Header from "@/components/header";
+import Footer from "@/components/footer";
+import { Toaster } from "sonner";
 
-const inter = Inter({ subsets: ["latin"] })
+const inter = Inter({ subsets: ["latin"] });
 
 export const metadata: Metadata = {
-  title: "CoMMSenso - Compostagem com Sensores",
-  description: "Conscientização, Mão na Massa e Sensores com a Compostagem de Resíduos Orgânicos - IFSP Birigui"
-}
+	title: "CoMMSenso - Compostagem com Sensores",
+	description:
+		"Conscientização, Mão na Massa e Sensores com a Compostagem de Resíduos Orgânicos - IFSP Birigui",
+};
 
 export default function RootLayout({
-  children,
+	children,
 }: Readonly<{
-  children: React.ReactNode
+	children: React.ReactNode;
 }>) {
-  return (
-    <html lang="pt-BR" suppressHydrationWarning>
-      <body className={inter.className}>
-        <ThemeProvider attribute="class" defaultTheme="light" enableSystem disableTransitionOnChange>
-          <Header />
-          <main className="min-h-screen">{children}</main>
-          <Footer />
-        </ThemeProvider>
-      </body>
-    </html>
-  )
+	return (
+		<html lang="pt-BR" suppressHydrationWarning>
+			<body className={inter.className}>
+				<ThemeProvider
+					attribute="class"
+					defaultTheme="light"
+					enableSystem
+					disableTransitionOnChange
+				>
+					<Header />
+					<main className="min-h-screen">{children}</main>
+					<Footer />
+					<Toaster richColors position="top-right" />
+				</ThemeProvider>
+			</body>
+		</html>
+	);
 }
