@@ -98,8 +98,7 @@ export default function SensorData() {
 	const isInitialMount = useRef(true);
 
 	// --- LÓGICA DE API ---
-	const API_BASE_URL =
-		process.env.COMMSENSO_API_URL || "https://commsenso.duckdns.org";
+	const API_BASE_URL = process.env.NEXT_PUBLIC_API_URL;
 
 	const makeApiRequest = useCallback(
 		async (
@@ -107,11 +106,6 @@ export default function SensorData() {
 			queryParams: URLSearchParams = new URLSearchParams()
 		) => {
 			queryParams.append("_t", Date.now().toString());
-			console.log("URL pra acessar:", `${API_BASE_URL}`);
-			console.log(
-				"Variável de ambiente COMMSENSO_API_URL:",
-				process.env.COMMSENSO_API_URL
-			);
 			const url = `${API_BASE_URL}${endpoint}?${queryParams.toString()}`;
 			const response = await fetch(url, {
 				method: "GET",
