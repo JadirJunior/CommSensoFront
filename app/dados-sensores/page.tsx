@@ -99,7 +99,7 @@ export default function SensorData() {
 
 	// --- LÓGICA DE API ---
 	const API_BASE_URL =
-		process.env.COMMSENSO_API_URL || "http://137.131.153.111:3000";
+		process.env.COMMSENSO_API_URL || "https://commsenso.duckdns.org";
 
 	const makeApiRequest = useCallback(
 		async (
@@ -107,6 +107,8 @@ export default function SensorData() {
 			queryParams: URLSearchParams = new URLSearchParams()
 		) => {
 			queryParams.append("_t", Date.now().toString());
+			console.log("Tentando acessar API:", `${API_BASE_URL}${endpoint}`);
+			console.log("Com parâmetros:", queryParams.toString());
 			const url = `${API_BASE_URL}${endpoint}?${queryParams.toString()}`;
 			const response = await fetch(url, {
 				method: "GET",
@@ -115,6 +117,7 @@ export default function SensorData() {
 					"Cache-Control": "no-cache",
 				},
 			});
+			console.log("Resposta da API:", response);
 			if (!response.ok)
 				throw new Error(`HTTP ${response.status}: ${await response.text()}`);
 			return response.json();
