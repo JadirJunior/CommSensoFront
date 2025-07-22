@@ -107,8 +107,11 @@ export default function SensorData() {
 			queryParams: URLSearchParams = new URLSearchParams()
 		) => {
 			queryParams.append("_t", Date.now().toString());
-			console.log("Tentando acessar API:", `${API_BASE_URL}${endpoint}`);
-			console.log("Com parâmetros:", queryParams.toString());
+			console.log("URL pra acessar:", `${API_BASE_URL}`);
+			console.log(
+				"Variável de ambiente COMMSENSO_API_URL:",
+				process.env.COMMSENSO_API_URL
+			);
 			const url = `${API_BASE_URL}${endpoint}?${queryParams.toString()}`;
 			const response = await fetch(url, {
 				method: "GET",
