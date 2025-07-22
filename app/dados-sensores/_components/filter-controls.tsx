@@ -124,9 +124,9 @@ export function FilterControls({
 					<Button onClick={onRefresh} variant="outline" size="sm">
 						<RefreshCw className="h-4 w-4 mr-2" /> Atualizar
 					</Button>
-					<Button onClick={onExport} variant="outline" size="sm">
+					{/* <Button onClick={onExport} variant="outline" size="sm">
 						<Download className="h-4 w-4 mr-2" /> Exportar CSV
-					</Button>
+					</Button> */}
 					<div className="flex items-center gap-2 ml-auto">
 						<span className="text-sm text-gray-600">Itens por página:</span>
 						<Select
